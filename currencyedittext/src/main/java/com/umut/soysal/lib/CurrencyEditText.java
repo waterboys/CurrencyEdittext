@@ -246,4 +246,13 @@ public class CurrencyEditText extends EditText {
         }
         return currency;
     }
+
+    @Override
+    protected void onSelectionChanged(int selStart, int selEnd) {
+        super.onSelectionChanged(selStart, selEnd);
+
+        if (rawValue == 0 && selEnd == 0 == getText().length() > 0) {
+            setSelection(1);
+        }
+    }
 }
