@@ -1,60 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.umut.soysal.lib.CurrencyEditText
+        android:id="@+id/currencyTr"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_toLeftOf="@+id/txtTl"
+        android:textColor="#707070"
+        android:textSize="23dp"
+        tools:ignore="MissingConstraints" />
 
-     <com.umut.soysal.lib.CurrencyEditText
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:layout_marginTop="50dp"
-             android:layout_marginLeft="20dp"
-             android:textColor="#707070"
-             android:textSize="23dp"
-             android:layout_toLeftOf="@+id/txtTl"
-             android:id="@+id/currencyTr"
-             tools:ignore="MissingConstraints"/>
+    <TextView
+        android:id="@+id/txtTl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="57dp"
+        android:layout_marginRight="10dp"
+        android:text="TL"
+        android:textColor="#707070"
+        android:textSize="25dp"
 
-     <TextView android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="TL"
-               android:textColor="#707070"
-               android:layout_marginTop="57dp"
-               android:layout_marginLeft="10dp"
-               android:id="@+id/txtTl"
-               android:textSize="25dp"
-               android:layout_marginRight="10dp"
-               android:layout_alignParentRight="true"
+        />
 
-     />
+    <com.umut.soysal.lib.CurrencyEditText
+        android:id="@+id/currencyEn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/currencyTr"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_toLeftOf="@+id/txtUsd"
+        android:textColor="#707070"
+        android:textSize="23dp"
+        tools:ignore="MissingConstraints" />
 
-     <com.umut.soysal.lib.CurrencyEditText
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:layout_marginTop="50dp"
-             android:layout_marginLeft="20dp"
-             android:textColor="#707070"
-             android:textSize="23dp"
-             android:layout_below="@+id/currencyTr"
-             android:layout_toLeftOf="@+id/txtUsd"
-             android:id="@+id/currencyEn"
-             tools:ignore="MissingConstraints"/>
+    <TextView
+        android:id="@+id/txtUsd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/currencyTr"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="57dp"
+        android:layout_marginRight="10dp"
+        android:text="USD"
+        android:textColor="#707070"
+        android:textSize="25dp"
 
-     <TextView android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="USD"
-               android:textColor="#707070"
-               android:layout_marginTop="57dp"
-               android:layout_marginLeft="10dp"
-               android:id="@+id/txtUsd"
-               android:layout_below="@+id/currencyTr"
-               android:textSize="25dp"
-               android:layout_marginRight="10dp"
-               android:layout_alignParentRight="true"
-
-     />
+        />
 
 </RelativeLayout>
