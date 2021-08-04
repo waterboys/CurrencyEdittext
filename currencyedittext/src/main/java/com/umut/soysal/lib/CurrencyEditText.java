@@ -251,7 +251,7 @@ public class CurrencyEditText extends EditText {
     protected void onSelectionChanged(int selStart, int selEnd) {
         super.onSelectionChanged(selStart, selEnd);
 
-        if (rawValue == 0 && selEnd == 0 == getText().length() > 0) {
+        if (rawValue == 0 && selEnd == 0 && getText().length() > 0) {
             setSelection(1);
         }
     }
