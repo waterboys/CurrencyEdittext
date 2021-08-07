@@ -274,10 +274,10 @@ public class CurrencyEditText extends EditText {
     protected int getMaxDisplayTextLength() {
         String fakeValueText = "1" + createZeroString(maxExactDigits + decimalDigits - 1);
         String formattedText = CurrencyTextFormatter.formatText(fakeValueText, getLocale(), getDefaultLocale(), getDecimalDigits());
-        return removeCurrencySymbolFromText(formattedText).length();
+        return removeCurrencySymbol(formattedText).length();
     }
 
-    protected String removeCurrencySymbolFromText(String text) {
+    protected String removeCurrencySymbol(String text) {
         return text.replaceAll("[^0-9,.]", "");
     }
 }

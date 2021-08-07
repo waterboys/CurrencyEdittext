@@ -55,6 +55,10 @@ class CurrencyTextWatcher implements TextWatcher {
             ignoreIteration = true;
             //Start by converting the editable to something easier to work with, then remove all non-digit characters
             String newText = editable.toString();
+            if (!isTextValid(newText)) { // Prevent text paste crash
+                editText.setText(lastGoodInput);
+                return;
+            }
             String textToDisplay;
             if (newText.length() < 1) {
                 lastGoodInput = "";
@@ -88,15 +92,9 @@ class CurrencyTextWatcher implements TextWatcher {
                 clickDot = false;
             }
 
-            boolean hasDecimal = !clickDelete && !okcommo && (editable.toString().length() - 2) <= editText.getSelectionStart();
             newText = (editText.areNegativeValuesAllowed()) ? newText.replaceAll("[^0-9/-]", "") : newText.replaceAll("[^0-9]", "");
-            if (!newText.equals("") && !newText.equals("-")) {
-                //Store a copy of the raw input to be retrieved later by getRawValue
-                long rawValue = Long.parseLong(newText);
-                if (hasDecimal) rawValue /= 10;
-                editText.setRawValue(rawValue);
-            }
 
+            boolean hasDecimal = !clickDelete && !okcommo && (editable.toString().length() - 2) <= editText.getSelectionStart();
             //ondalik bolumdesin
             if (hasDecimal) {
                 newText = newText.substring(0, newText.length() - 1);
@@ -105,23 +103,19 @@ class CurrencyTextWatcher implements TextWatcher {
                 rightPost = false;
             }
 
-
             try {
                 textToDisplay = CurrencyTextFormatter.formatText(newText, editText.getLocale(), editText.getDefaultLocale(), editText.getDecimalDigits());
-                textToDisplay = editText.removeCurrencySymbolFromText(textToDisplay);
-                boolean isAvailableToDisplay = editText.removeCurrencySymbolFromText(textToDisplay).length() <= editText.getMaxDisplayTextLength();
-                if (!isAvailableToDisplay) {
-                    setRawValueFromLastGoodInput();
-                    textToDisplay = lastGoodInput;
-                }
+                textToDisplay = editText.removeCurrencySymbol(textToDisplay);
+                boolean isAvailableToDisplay = textToDisplay.length() <= editText.getMaxDisplayTextLength();
+                if (!isAvailableToDisplay) textToDisplay = lastGoodInput;
             } catch (IllegalArgumentException exception) {
-                setRawValueFromLastGoodInput();
                 textToDisplay = lastGoodInput;
             }
 
             editText.setText(textToDisplay);
             //Store the last known good input so if there are any issues with new input later, we can fall back gracefully.
             lastGoodInput = textToDisplay;
+            setRawValueFromLastGoodInput();
 
             if (!clickDelete && rightPost && cursorPosition <= (editable.toString().length() - 2)) {
                 if (cursorPosition + 2 <= lastGoodInput.length()) {
@@ -246,6 +240,10 @@ class CurrencyTextWatcher implements TextWatcher {
         String rawText = lastGoodInput.replaceAll("[^0-9]", "");
         long rawValue = Long.parseLong(rawText);
         editText.setRawValue(rawValue);
+    }
+
+    private boolean isTextValid(String text) {
+        return text.replaceAll("[0-9,.]", "").isEmpty();
     }
 
 
