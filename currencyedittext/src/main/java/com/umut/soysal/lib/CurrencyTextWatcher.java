@@ -108,10 +108,14 @@ class CurrencyTextWatcher implements TextWatcher {
 
             try {
                 textToDisplay = CurrencyTextFormatter.formatText(newText, editText.getLocale(), editText.getDefaultLocale(), editText.getDecimalDigits());
-
-                textToDisplay = textToDisplay.substring(1);
-
+                textToDisplay = editText.removeCurrencySymbolFromText(textToDisplay);
+                boolean isAvailableToDisplay = editText.removeCurrencySymbolFromText(textToDisplay).length() <= editText.getMaxDisplayTextLength();
+                if (!isAvailableToDisplay) {
+                    setRawValueFromLastGoodInput();
+                    textToDisplay = lastGoodInput;
+                }
             } catch (IllegalArgumentException exception) {
+                setRawValueFromLastGoodInput();
                 textToDisplay = lastGoodInput;
             }
 
@@ -236,6 +240,12 @@ class CurrencyTextWatcher implements TextWatcher {
 
     private void changeSignedKeyboard() {
         editText.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+    }
+
+    private void setRawValueFromLastGoodInput() {
+        String rawText = lastGoodInput.replaceAll("[^0-9]", "");
+        long rawValue = Long.parseLong(rawText);
+        editText.setRawValue(rawValue);
     }
 
 
