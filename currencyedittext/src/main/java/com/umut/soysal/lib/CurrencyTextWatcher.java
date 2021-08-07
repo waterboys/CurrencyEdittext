@@ -88,14 +88,17 @@ class CurrencyTextWatcher implements TextWatcher {
                 clickDot = false;
             }
 
+            boolean hasDecimal = !clickDelete && !okcommo && (editable.toString().length() - 2) <= editText.getSelectionStart();
             newText = (editText.areNegativeValuesAllowed()) ? newText.replaceAll("[^0-9/-]", "") : newText.replaceAll("[^0-9]", "");
             if (!newText.equals("") && !newText.equals("-")) {
                 //Store a copy of the raw input to be retrieved later by getRawValue
-                editText.setRawValue(Long.parseLong(newText));
+                long rawValue = Long.parseLong(newText);
+                if (hasDecimal) rawValue /= 10;
+                editText.setRawValue(rawValue);
             }
 
             //ondalik bolumdesin
-            if (!clickDelete && !okcommo && (editable.toString().length() - 2) <= editText.getSelectionStart()) {
+            if (hasDecimal) {
                 newText = newText.substring(0, newText.length() - 1);
                 rightPost = true;
             } else {
