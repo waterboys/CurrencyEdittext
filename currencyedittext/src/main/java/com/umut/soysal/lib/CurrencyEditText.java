@@ -60,7 +60,7 @@ public class CurrencyEditText extends EditText {
 
     public void setValue(long value) {
         String formattedText = format(value);
-        setText(formattedText);
+        setText(removeCurrencySymbol(formattedText));
     }
 
     public Locale getLocale() {
@@ -122,7 +122,7 @@ public class CurrencyEditText extends EditText {
     }
 
     private void refreshView() {
-        setText(format(getRawValue()));
+        setText(removeCurrencySymbol(format(getRawValue())));
         updateHint();
     }
 

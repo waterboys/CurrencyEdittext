@@ -56,9 +56,15 @@ class CurrencyTextWatcher implements TextWatcher {
             //Start by converting the editable to something easier to work with, then remove all non-digit characters
             String newText = editable.toString();
             if (!isTextValid(newText)) { // Prevent text paste crash
-                editText.setText(lastGoodInput);
+                if (lastGoodInput != null) {
+                    setRawValueFromLastGoodInput();
+                    editText.setText(lastGoodInput);
+                } else {
+                    editText.setValue(0);
+                }
                 return;
             }
+
             String textToDisplay;
             if (newText.length() < 1) {
                 lastGoodInput = "";
