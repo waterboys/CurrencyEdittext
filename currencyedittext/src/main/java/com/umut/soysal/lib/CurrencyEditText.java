@@ -28,6 +28,8 @@ public class CurrencyEditText extends EditText {
     private CurrencyTextWatcher textWatcher;
     private String hintCache = null;
     private int decimalDigits = 0;
+    private int maxExactDigits = 0;
+    private final static int DEFAULT_MAX_EXACT_DIGITS = 6; // Example for 6 exact 2 decimal: 999,999.00
     private int mValueInLowestDenom = 0;
 
 
@@ -58,7 +60,7 @@ public class CurrencyEditText extends EditText {
 
     public void setValue(long value) {
         String formattedText = format(value);
-        setText(formattedText);
+        setText(removeCurrencySymbol(formattedText));
     }
 
     public Locale getLocale() {
@@ -89,6 +91,13 @@ public class CurrencyEditText extends EditText {
         refreshView();
     }
 
+    public void setMaxExactDigits(int digits) {
+        if (digits < 1)
+            throw new IllegalArgumentException("Max exact digit value must be greater than 1");
+        maxExactDigits = digits;
+        refreshView();
+    }
+
     public void configureViewForLocale(Locale locale) {
         this.currencyLocale = locale;
         Currency currentCurrency = getCurrencyForLocale(locale);
@@ -113,7 +122,7 @@ public class CurrencyEditText extends EditText {
     }
 
     private void refreshView() {
-        setText(format(getRawValue()));
+        setText(removeCurrencySymbol(format(getRawValue())));
         updateHint();
     }
 
@@ -164,6 +173,7 @@ public class CurrencyEditText extends EditText {
         currencyLocale = retrieveLocale();
         Currency currentCurrency = getCurrencyForLocale(currencyLocale);
         decimalDigits = currentCurrency.getDefaultFractionDigits();
+        setMaxExactDigits(DEFAULT_MAX_EXACT_DIGITS);
         initCurrencyTextWatcher();
     }
 
@@ -193,8 +203,9 @@ public class CurrencyEditText extends EditText {
         this.hintCache = getHintString();
         updateHint();
 
-        this.setAllowNegativeValues(array.getBoolean(R.styleable.CurrencyEditText_allow_negative_values, false));
-        this.setDecimalDigits(array.getInteger(R.styleable.CurrencyEditText_decimal_digits, decimalDigits));
+        this.setAllowNegativeValues(array.getBoolean(R.styleable.CurrencyEditText_allowNegativeValues, false));
+        this.setDecimalDigits(array.getInteger(R.styleable.CurrencyEditText_decimalDigits, decimalDigits));
+        this.setMaxExactDigits(array.getInteger(R.styleable.CurrencyEditText_maxExactDigits, maxExactDigits));
 
         array.recycle();
     }
@@ -247,6 +258,10 @@ public class CurrencyEditText extends EditText {
         return currency;
     }
 
+    private String createZeroString(int length) {
+        return String.format("%1$" + length + "s", "").replace(' ', '0');
+    }
+
     @Override
     protected void onSelectionChanged(int selStart, int selEnd) {
         super.onSelectionChanged(selStart, selEnd);
@@ -254,5 +269,15 @@ public class CurrencyEditText extends EditText {
         if (rawValue / 100 == 0 && selEnd == 0 && getText().length() > 0) {
             setSelection(1);
         }
+    }
+
+    protected int getMaxDisplayTextLength() {
+        String fakeValueText = "1" + createZeroString(maxExactDigits + decimalDigits - 1);
+        String formattedText = CurrencyTextFormatter.formatText(fakeValueText, getLocale(), getDefaultLocale(), getDecimalDigits());
+        return removeCurrencySymbol(formattedText).length();
+    }
+
+    protected String removeCurrencySymbol(String text) {
+        return text.replaceAll("[^0-9,.]", "");
     }
 }
