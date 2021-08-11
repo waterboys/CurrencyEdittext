@@ -18,6 +18,9 @@ class CurrencyTextWatcher implements TextWatcher {
     private boolean ignoreIteration;
     private String lastGoodInput;
 
+    private int latestTextLength = 0;
+    private boolean isDeleteKeyActionCapturing = false;
+
 
     CurrencyTextWatcher(CurrencyEditText textBox) {
         editText = textBox;
@@ -27,7 +30,8 @@ class CurrencyTextWatcher implements TextWatcher {
 
         editText.setOnKeyListener((v, keyCode, event) -> {
             if (keyCode == KeyEvent.KEYCODE_DEL) {
-                clickDelete = true;
+                isDeleteKeyActionCapturing = true;
+                onKeyDelete();
             } else if (keyCode == 55) {
                 clickDelete = false;
                 okcommo = true;
@@ -48,11 +52,27 @@ class CurrencyTextWatcher implements TextWatcher {
 
     }
 
+    private void onKeyDelete() {
+        clickDelete = true;
+    }
+
+    private void detectDeleteKeyEvent(Editable editable) {
+        if (isDeleteKeyActionCapturing) return; // Don'T use workaround.
+        // https://issuetracker.google.com/issues/36964165
+        // https://stackoverflow.com/a/19980975/11245490
+        // TODO Workaround for now. It does not cover multiple selection delete.
+        int length = editable.length();
+        if (latestTextLength > length) onKeyDelete();
+        latestTextLength = length;
+    }
+
     @Override
     public void afterTextChanged(Editable editable) {
+
         //Use the ignoreIteration flag to stop our edits to the text field from triggering an endlessly recursive call to afterTextChanged
         if (!ignoreIteration) {
             ignoreIteration = true;
+            detectDeleteKeyEvent(editable);
             //Start by converting the editable to something easier to work with, then remove all non-digit characters
             String newText = editable.toString();
             if (!isTextValid(newText)) { // Prevent text paste crash
@@ -206,6 +226,7 @@ class CurrencyTextWatcher implements TextWatcher {
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        latestTextLength = s.length();
         if (s.length() == 0) {
             isEmpty = true;
         }
