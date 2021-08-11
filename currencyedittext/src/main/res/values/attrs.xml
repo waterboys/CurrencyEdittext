@@ -4,5 +4,6 @@
         <attr name="allowNegativeValues" format="boolean" />
         <attr name="decimalDigits" format="integer" />
         <attr name="maxExactDigits" format="integer" />
+        <attr name="currencyLocale" format="string" />
     </declare-styleable>
 </resources>

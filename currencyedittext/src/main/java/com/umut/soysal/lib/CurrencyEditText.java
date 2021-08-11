@@ -20,6 +20,7 @@ import java.util.Locale;
 @SuppressLint("AppCompatCustomView")
 @SuppressWarnings("unused")
 public class CurrencyEditText extends EditText {
+    private final static int DEFAULT_MAX_EXACT_DIGITS = 6; // Example for 6 exact 2 decimal: 999,999.00
     public static int cursor = 0;
     private Locale currencyLocale;
     private Locale defaultLocale = Locale.US;
@@ -29,7 +30,6 @@ public class CurrencyEditText extends EditText {
     private String hintCache = null;
     private int decimalDigits = 0;
     private int maxExactDigits = 0;
-    private final static int DEFAULT_MAX_EXACT_DIGITS = 6; // Example for 6 exact 2 decimal: 999,999.00
     private int mValueInLowestDenom = 0;
 
 
@@ -206,6 +206,15 @@ public class CurrencyEditText extends EditText {
         this.setAllowNegativeValues(array.getBoolean(R.styleable.CurrencyEditText_allowNegativeValues, false));
         this.setDecimalDigits(array.getInteger(R.styleable.CurrencyEditText_decimalDigits, decimalDigits));
         this.setMaxExactDigits(array.getInteger(R.styleable.CurrencyEditText_maxExactDigits, maxExactDigits));
+
+        final String locale = array.getString(R.styleable.CurrencyEditText_currencyLocale);
+        if (locale != null && !locale.isEmpty()) {
+            final String[] splitted = locale.split("_");
+            String language = splitted[0];
+            String country = splitted.length > 1 ? splitted[1] : "";
+            String variant = splitted.length > 2 ? splitted[2] : "";
+            setLocale(new Locale(language, country, variant));
+        }
 
         array.recycle();
     }

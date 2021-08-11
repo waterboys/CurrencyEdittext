@@ -16,6 +16,7 @@
         android:textColor="#707070"
         android:textSize="23dp"
         app:decimalDigits="2"
+        app:currencyLocale="tr_TR"
         app:maxExactDigits="2"
         tools:ignore="MissingConstraints" />
 
