@@ -80,7 +80,7 @@ class CurrencyTextWatcher implements TextWatcher {
                     setRawValueFromLastGoodInput();
                     editText.setText(lastGoodInput);
                 } else {
-                    editText.setValue(0);
+                    editText.setRawValue(0);
                 }
                 return;
             }
@@ -88,7 +88,7 @@ class CurrencyTextWatcher implements TextWatcher {
             String textToDisplay;
             if (newText.length() < 1) {
                 lastGoodInput = "";
-                editText.setRawValue(0);
+                editText.setRawValueInternal(0);
                 editText.setText("");
                 return;
             }
@@ -266,7 +266,7 @@ class CurrencyTextWatcher implements TextWatcher {
     private void setRawValueFromLastGoodInput() {
         String rawText = lastGoodInput.replaceAll("[^0-9]", "");
         long rawValue = Long.parseLong(rawText);
-        editText.setRawValue(rawValue);
+        editText.setRawValueInternal(rawValue);
     }
 
     private boolean isTextValid(String text) {

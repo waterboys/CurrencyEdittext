@@ -49,18 +49,26 @@ public class CurrencyEditText extends EditText {
         return allowNegativeValues;
     }
 
+    public double getValue() {
+        return rawValue / Math.pow(10.0, decimalDigits);
+    }
+
+    public void setValue(double value) {
+        long rawValue = Math.round(value * (Math.pow(10.0, decimalDigits)));
+        setRawValue(rawValue);
+    }
 
     public long getRawValue() {
         return rawValue;
     }
 
-    protected void setRawValue(long value) {
-        rawValue = value;
-    }
-
-    public void setValue(long value) {
+    public void setRawValue(long value) {
         String formattedText = format(value);
         setText(removeCurrencySymbol(formattedText));
+    }
+
+    protected void setRawValueInternal(long value) {
+        rawValue = value;
     }
 
     public Locale getLocale() {
