@@ -265,7 +265,7 @@ class CurrencyTextWatcher implements TextWatcher {
 
     private void setRawValueFromLastGoodInput() {
         String rawText = lastGoodInput.replaceAll("[^0-9]", "");
-        long rawValue = Long.parseLong(rawText);
+        long rawValue = rawText.isEmpty() ? 0 : Long.parseLong(rawText);
         editText.setRawValueInternal(rawValue);
     }
 
