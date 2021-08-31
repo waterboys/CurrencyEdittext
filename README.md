@@ -28,7 +28,7 @@ allprojects {
 ```gradle
 
 dependencies {
-      implementation 'com.github.waterboys:CurrencyEdittext:1.1.4'
+      implementation 'com.github.waterboys:CurrencyEdittext:1.2.1'
 }
 	
 ```
