@@ -284,7 +284,7 @@ public class CurrencyEditText extends EditText {
         super.onSelectionChanged(selStart, selEnd);
 
         if (rawValue / 100 == 0 && selEnd == 0 && getText().length() > 0) {
-            setSelection(1);
+            setSelectionSafe(1);
         }
     }
 
@@ -296,5 +296,14 @@ public class CurrencyEditText extends EditText {
 
     protected String removeCurrencySymbol(String text) {
         return text.replaceAll("[^0-9,.]", "");
+    }
+
+    public void setSelectionSafe(int selection) {
+        int length = getText().length();
+        if (selection < 0) {
+            setSelection(0);
+        } else {
+            setSelection(Math.min(selection, length));
+        }
     }
 }

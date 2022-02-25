@@ -12,6 +12,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        testButton.setOnClickListener {
+            testEdit.setSelectionSafe(5)
+        }
+
         ///set locale
         currencyEn.locale = Locale.US
 
