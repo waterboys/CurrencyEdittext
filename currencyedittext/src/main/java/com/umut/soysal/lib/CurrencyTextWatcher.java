@@ -145,29 +145,29 @@ class CurrencyTextWatcher implements TextWatcher {
 
             if (!clickDelete && rightPost && cursorPosition <= (editable.toString().length() - 2)) {
                 if (cursorPosition + 2 <= lastGoodInput.length()) {
-                    editText.setSelection(cursorPosition + 1);
+                    editText.setSelectionSafe(cursorPosition + 1);
                 } else {
-                    editText.setSelection(lastGoodInput.length());
+                    editText.setSelectionSafe(lastGoodInput.length());
                 }
                 rightPost = false;
             } else if (!clickDelete && rightPost && cursorPosition == (editable.toString().length())) {
-                editText.setSelection(lastGoodInput.length());
+                editText.setSelectionSafe(lastGoodInput.length());
                 rightPost = false;
             } else {
                 if (isEmpty) {
-                    editText.setSelection(1);
-                    cursorPosition = (1);
+                    editText.setSelectionSafe(1);
+                    cursorPosition = 1;
                     isEmpty = false;
                 } else if (okcommo) {
                     if (cursorPosition != lastGoodInput.length()) {
                         if (clickDot) {
-                            editText.setSelection(editText.length() - 2);
+                            editText.setSelectionSafe(editText.length() - 2);
                             clickDot = false;
                         } else {
-                            editText.setSelection(cursorPosition + 1);
+                            editText.setSelectionSafe(cursorPosition + 1);
                         }
                     } else {
-                        editText.setSelection(textToDisplay.length() - 1);
+                        editText.setSelectionSafe(textToDisplay.length() - 1);
                     }
                 } else {
                     okcommo = false;
@@ -175,29 +175,28 @@ class CurrencyTextWatcher implements TextWatcher {
                     if (clickDelete && !rightPost) {
                         if (diff == 2) {
                             if (cursorPosition == 0) {
-                                editText.setSelection(0);
+                                editText.setSelectionSafe(0);
                             } else {
-                                editText.setSelection(cursorPosition - 1);
+                                editText.setSelectionSafe(cursorPosition - 1);
                             }
                         } else if (diff > 2) {
-                            editText.setSelection(0);
+                            editText.setSelectionSafe(0);
                         } else {
-                            editText.setSelection(cursorPosition);
+                            editText.setSelectionSafe(cursorPosition);
                         }
                         clickDelete = false;
                     } else if (clickDelete && rightPost) {
                         if (cursorPosition + 1 <= lastGoodInput.length()) {
-                            editText.setSelection(cursorPosition - 1);
+                            editText.setSelectionSafe(cursorPosition - 1);
                         } else {
-                            editText.setSelection(lastGoodInput.length() - 3);
+                            editText.setSelectionSafe(lastGoodInput.length() - 3);
                         }
                         clickDelete = false;
                     } else {
                         if ((cursorPosition + Math.abs(currentTextsize - lastGoodInput.length())) > lastGoodInput.length()) {
-                            editText.setSelection(editText.getSelectionStart() + 1);
+                            editText.setSelectionSafe(editText.getSelectionStart() + 1);
                         } else {
-
-                            editText.setSelection(cursorPosition + Math.abs(currentTextsize - lastGoodInput.length()));
+                            editText.setSelectionSafe(cursorPosition + Math.abs(currentTextsize - lastGoodInput.length()));
                         }
 
                     }
@@ -216,8 +215,8 @@ class CurrencyTextWatcher implements TextWatcher {
                     tempText = "";
                 }
                 editText.setText(tempText);
-                editText.setSelection(1);
-                cursorPosition = (1);
+                editText.setSelectionSafe(1);
+                cursorPosition = 1;
                 isEmpty = false;
             }
         }
